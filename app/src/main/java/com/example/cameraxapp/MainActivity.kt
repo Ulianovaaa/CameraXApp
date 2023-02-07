@@ -39,6 +39,7 @@ import java.util.Locale
 typealias LumaListener = (luma: Double) -> Unit
 
 
+
 class MainActivity : AppCompatActivity() {
     /**
      * Пошёл туториал с гугла
@@ -191,6 +192,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -220,7 +223,7 @@ class MainActivity : AppCompatActivity() {
                 cameraProvider.unbindAll()
 
                 // Bind use cases to camera
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, videoCapture)
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -270,7 +273,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
     private class LuminosityAnalyzer(private val listener: LumaListener) : ImageAnalysis.Analyzer {
 
