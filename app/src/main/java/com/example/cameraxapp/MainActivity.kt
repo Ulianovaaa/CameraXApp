@@ -77,13 +77,7 @@ class MainActivity : AppCompatActivity() {
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
-        val imageAnalyzer = ImageAnalysis.Builder()
-            .build()
-            .also {
-                it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                    Log.d(TAG, "Average luminosity: $luma")
-                })
-            }
+
 
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
@@ -206,7 +200,7 @@ class MainActivity : AppCompatActivity() {
                 }
             imageCapture = ImageCapture.Builder()
                 .build()
-
+            //вот тут аналайзер
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
@@ -223,8 +217,9 @@ class MainActivity : AppCompatActivity() {
                 cameraProvider.unbindAll()
 
                 // Bind use cases to camera
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview)
-
+                //тут было видео капчур но нам его не надо!11 пусть просто превью будет
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
